@@ -13,7 +13,7 @@ This project explores the intersection of continuous optimization and discrete d
 At the core of the engine is the computation of exact gradients without relying on symbolic manipulation or numerical approximation (which introduces floating-point errors). 
 
 The network replaces traditional scalar weights with learnable Gaussian curves on the edges:
-$$ \phi(x) = \sum_{i=1}^{N} w_i e^{-\gamma (x - \mu_i)^2} $$
+![equation](https://latex.codecogs.com/svg.image?$$\phi(x)=\sum_{i=1}^{N}w_i&space;e^{-\gamma(x-\mu_i)^2}$)
 
 During the forward pass, operations dynamically construct a computational graph. Calling `.backward()` traverses this graph in reverse topological order, applying the chain rule to update the means ($\mu$), widths ($\gamma$), and amplitudes ($w$) of the Gaussian curves.
 
