@@ -9,10 +9,10 @@ class Value:
         self.backward = backward # FUNCTION
 
     def __add__(self,b):
-        if isinstance(b, int) or isinstance(b,float):
-            data = self.data + b
-        else:
-            data = self.data + b.data
+        if isinstance(b, int) or isinstance(b, float):
+            b = Value(b)
+
+        data = self.data + b.data
 
         c = Value(
             data, # Value adding
@@ -23,23 +23,19 @@ class Value:
         )
 
         def _backward_recipe():
-            self.gradient += (
-                self.gradient + (1.0*c.gradient)
-                )
+            self.gradient += (1.0*c.gradient)
             
-            b.gradient += (
-                b.gradient + (1.0*c.gradient)
-            )
+            b.gradient += (1.0*c.gradient)
     
         c.backward = _backward_recipe
 
         return c
 
     def __mul__(self,b):
-        if isinstance(b, int) or isinstance(b,float):
-            data = self.data * b
-        else:
-            data = self.data * b.data
+        if isinstance(b, int) or isinstance(b, float):
+            b = Value(b)
+
+        data = self.data * b.data
 
         c = Value(
             data, # Value adding
@@ -64,11 +60,6 @@ class Value:
     
     def __pow__(self,b):
         if isinstance(b,int) or isinstance(b,float):
-            def _backward_recipe():
-                self.gradient += (
-                    b * (self.data-1) * self.gradient
-                )
-
             c = Value(
                 self.data ** b,
                 0.0,
@@ -76,6 +67,11 @@ class Value:
                 "^",
                 None
             )
+
+            def _backward_recipe():
+                self.gradient += (
+                    b * (self.data ** (b - 1)) * c.gradient
+                )
         
             c.backward = _backward_recipe
 
