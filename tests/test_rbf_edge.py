@@ -1,7 +1,7 @@
 import unittest
 import math
 from engine.value import Value
-from engine.rbf_edge import rbf_edge
+from engine.rbf_edge import RBFEdge as rbf_edge
 
 class TestRBFEdge(unittest.TestCase):
 

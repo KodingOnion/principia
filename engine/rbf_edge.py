@@ -1,7 +1,7 @@
 import random
 from engine.value import Value
 
-class rbf_edge:
+class RBFEdge:
     def __init__(self,mean=None,width=None,amplitude=None):
         if mean is not None:
             self.mean = Value(mean)
@@ -13,7 +13,7 @@ class rbf_edge:
         if width is not None:
             self.width = Value(width)
         else:
-            data = random.uniform(0,1)
+            data = random.uniform(0.1,1)
 
             self.width = Value(data)
 
