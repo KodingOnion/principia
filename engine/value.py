@@ -1,12 +1,12 @@
 import math
 
 class Value:
-    def __init__(self,data=None,gradient=0.0,children=None,operation=None,backward=None):
+    def __init__(self,data=None,gradient=0.0,children=[],operation=None,backward=None):
         self.data = data # REAL
         self.gradient = gradient # REAL
         self.children = children # SET OF Value
         self.operation = operation # CHAR
-        self.backward = backward # FUNCTION
+        self._backward = lambda: None # FUNCTION
 
     def __add__(self,b):
         if isinstance(b, int) or isinstance(b, float):
@@ -27,7 +27,7 @@ class Value:
             
             b.gradient += (1.0*c.gradient)
     
-        c.backward = _backward_recipe
+        c._backward = _backward_recipe
 
         return c
 
@@ -54,7 +54,7 @@ class Value:
                 self.data * c.gradient
             )
         
-        c.backward = _backward_receipe
+        c._backward = _backward_receipe
 
         return c
     
@@ -64,7 +64,7 @@ class Value:
                 self.data ** b,
                 0.0,
                 [self],
-                "^",
+                "**",
                 None
             )
 
@@ -73,7 +73,7 @@ class Value:
                     b * (self.data ** (b - 1)) * c.gradient
                 )
         
-            c.backward = _backward_recipe
+            c._backward = _backward_recipe
 
             return c
         else:
@@ -103,6 +103,28 @@ class Value:
                 c.data * c.gradient
             )
         
-        c.backward = _backward_recipe
+        c._backward = _backward_recipe
 
         return c
+    
+    def backward(self):
+        visited = set()
+        ordered = []
+
+        def helper(node):
+            if node not in visited:
+                visited.add(node)
+
+                for child in node.children:
+                    helper(child)
+
+                ordered.append(node)
+
+        helper(self)
+
+
+        if self.gradient is None or self.gradient is 0.0:
+            self.gradient = 1.0
+
+        for node in reversed(ordered):
+            node._backward()

@@ -67,7 +67,6 @@ class TestValueEngine(unittest.TestCase):
         
         c.gradient = 1.0
         c.backward()          # Run addition backward
-        mult_node.backward()  # Run multiplication backward
         
         self.assertEqual(a.gradient, 4.0, "Gradient must accumulate (+=), not overwrite (=)")
 
@@ -159,13 +158,6 @@ class TestValueEngine(unittest.TestCase):
         
         c.gradient = 1.0
         c.backward() # This will only trigger the division node!
-        
-        # Wait! Because you don't have the topological sort built yet, 
-        # calling c.backward() won't automatically cascade down to the power node.
-        # So we have to manually trigger the child node for this test to work right now.
-        for child in c.children:
-            if child.operation == '**': # The (a**2) node
-                child.backward()
         
         self.assertAlmostEqual(a.gradient, 4/3, places=4, msg="Complex chain rule failed for a")
         self.assertAlmostEqual(b.gradient, -4/9, places=4, msg="Complex chain rule failed for b")
