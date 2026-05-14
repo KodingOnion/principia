@@ -1,3 +1,5 @@
+import math
+
 class Value:
     def __init__(self,data=None,gradient=0.0,children=None,operation=None,backward=None):
         self.data = data # REAL
@@ -34,8 +36,13 @@ class Value:
         return c
 
     def __mul__(self,b):
+        if isinstance(b, int) or isinstance(b,float):
+            data = self.data * b
+        else:
+            data = self.data * b.data
+
         c = Value(
-            self.data * b.data, # Value adding
+            data, # Value adding
             0.0, # Gradient stuff
             [self,b], # Children
             '*', # Operation
@@ -52,5 +59,54 @@ class Value:
             )
         
         c.backward = _backward_receipe
+
+        return c
+    
+    def __pow__(self,b):
+        if isinstance(b,int) or isinstance(b,float):
+            def _backward_recipe():
+                self.gradient += (
+                    b * (self.data-1) * self.gradient
+                )
+
+            c = Value(
+                self.data ** b,
+                0.0,
+                [self],
+                "^",
+                None
+            )
+        
+            c.backward = _backward_recipe
+
+            return c
+        else:
+            raise TypeError("Invalid data type for __pow__ in Value class")
+
+    
+    def __neg__(self):
+        return self * -1.0
+
+    def __sub__(self,b):
+        return self + (-b)
+    
+    def __truediv__(self, b):
+        return self * (b ** -1)
+    
+    def exp(self):
+        c = Value(
+            math.exp(self.data),
+            0.0,
+            [self],
+            "exp",
+            None
+        )
+
+        def _backward_recipe():
+            self.gradient += (
+                c.data * c.gradient
+            )
+        
+        c.backward = _backward_recipe
 
         return c
