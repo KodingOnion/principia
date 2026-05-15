@@ -1,7 +1,9 @@
 import math
 
 class Value:
-    def __init__(self,data=None,gradient=0.0,children=[],operation=None,backward=None):
+    def __init__(self,data=None,gradient=0.0,children=None,operation=None,backward=None):
+        if children is None:
+            children = []
         self.data = data # REAL
         self.gradient = gradient # REAL
         self.children = children # SET OF Value
