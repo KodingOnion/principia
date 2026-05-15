@@ -8,6 +8,16 @@ Unlike standard Multi-Layer Perceptrons (MLPs) that rely on fixed activation fun
 
 This project explores the intersection of continuous optimization and discrete data structures, relying heavily on directed acyclic graphs (DAGs) to compute exact algorithmic gradients via the chain rule.
 
+## Quickstart
+
+Principia relies purely on standard Python libraries. No external dependencies are required.
+
+```bash
+git clone [https://github.com/yourusername/principia.git](https://github.com/yourusername/principia.git)
+cd principia
+python principia/demos/demo_autograd.py
+```
+
 ## Mathematical Architecture
 
 At the core of the engine is the computation of exact gradients without relying on symbolic manipulation or numerical approximation (which introduces floating-point errors). 
