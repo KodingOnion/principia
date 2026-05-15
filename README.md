@@ -1,50 +1,46 @@
 # Principia
 
-A lightweight Automatic Differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) built from mathematical first principles in Python.
+A lightweight automatic differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) implementation in pure Python.
 
 ## Overview
 
-Unlike standard Multi-Layer Perceptrons (MLPs) that rely on fixed activation functions at the nodes, Kolmogorov-Arnold Networks place learnable functions on the edges. **Principia** implements a custom Autograd engine to power an RBF-KAN—a computationally efficient variant that replaces the expensive B-splines of the original 2024 architecture with Gaussian Radial Basis Functions (RBFs).
+Principia explores gradient-based learning with a small from-scratch autograd system.
+It uses directed acyclic graphs (DAGs) for backpropagation and composes Gaussian RBF edges into layers.
 
-This project explores the intersection of continuous optimization and discrete data structures, relying heavily on directed acyclic graphs (DAGs) to compute exact algorithmic gradients via the chain rule.
+## Requirements
+
+- Python 3.12+
+- No external Python dependencies
 
 ## Quickstart
 
-Principia relies purely on standard Python libraries. No external dependencies are required.
-
 ```bash
-git clone [https://github.com/yourusername/principia.git](https://github.com/yourusername/principia.git)
+git clone https://github.com/KodingOnion/principia.git
 cd principia
-python principia/demos/demo_autograd.py
+python -m unittest discover -s tests
+python demos/demo_autograd.py
 ```
-
-## Mathematical Architecture
-
-At the core of the engine is the computation of exact gradients without relying on symbolic manipulation or numerical approximation (which introduces floating-point errors). 
-
-The network replaces traditional scalar weights with learnable Gaussian curves on the edges:
-![equation](https://latex.codecogs.com/svg.image?$$\phi(x)=\sum_{i=1}^{N}w_i&space;e^{-\gamma(x-\mu_i)^2}$)
-
-During the forward pass, operations dynamically construct a computational graph. Calling `.backward()` traverses this graph in reverse topological order, applying the chain rule to update the means ($\mu$), widths ($\gamma$), and amplitudes ($w$) of the Gaussian curves.
-
-## Technical Highlights
-
-- **Autograd Engine:** A custom `Value` class that wraps scalar floats, dynamically tracks parent dependencies, and stores local derivative closures to construct a computational graph.
-- **Abstract Data Structures:** Heavy utilization of Directed Acyclic Graphs (DAGs) for backpropagation and topological sorting algorithms.
-- **Object-Oriented Design:** A strictly modular architecture separating the core calculus engine from the neural network layers and application wrapper.
-- **Robustness:** Built-in data validation and error handling to manage vanishing gradients and unstable topological states.
 
 ## Project Structure
 
 ```text
 principia/
-├── engine/              # The core mathematical framework
-│   ├── __init__.py
-│   ├── value.py         # Autograd engine and topological graph nodes
-│   ├── rbf_edge.py      # Gaussian mathematical connections
-│   ├── layer.py         # Node/edge grouping algorithms
-│   └── model.py         # High-level KAN architecture
-├── app/                 # Application wrapper (In Development)
-│   ├── gui.py           # Experiment dashboard and live visualization
-│   └── database.py      # SQLite integration for logging experiment states
-├── main.py              # Engine entry point and testing environment
+├── engine/
+│   ├── layer.py      # RBF layer implementation
+│   ├── rbf_edge.py   # Gaussian RBF edge implementation
+│   └── value.py      # Scalar autograd Value class and backpropagation
+├── demos/
+│   └── demo_autograd.py
+├── tests/
+│   ├── test_layer.py
+│   ├── test_rbf_edge.py
+│   └── test_value.py
+├── .github/workflows/tests.yml
+└── README.md
+```
+
+## Running Tests
+
+```bash
+python -m unittest discover -s tests
+```

@@ -125,7 +125,7 @@ class Value:
         helper(self)
 
 
-        if self.gradient is None or self.gradient is 0.0:
+        if self.gradient is None or self.gradient == 0.0:
             self.gradient = 1.0
 
         for node in reversed(ordered):
