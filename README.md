@@ -15,7 +15,12 @@ It uses directed acyclic graphs (DAGs) for backpropagation and composes Gaussian
 ## Quickstart
 
 ```bash
+# HTTPS
 git clone https://github.com/KodingOnion/principia.git
+
+# SSH (optional)
+git clone git@github.com:KodingOnion/principia.git
+
 cd principia
 python -m unittest discover -s tests
 python demos/demo_autograd.py
