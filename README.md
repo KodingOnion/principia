@@ -1,8 +1,10 @@
 # Principia 🍎
 
-![Python Version](https://img.shields.io/badge/python-3.12%2+-%233776AB.svg?style=flat&logo=python&logoColor=white)
-![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+<p align="center">
+    <img src="https://img.shields.io/badge/python-3.12%2B-blue.svg?style=flat&logo=python&logoColor=white" alt="Python Version">
+    <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg" alt="Dependencies">
+    <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status">
+</p>
 
 A lightweight, **zero-dependency** automatic differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) implementation built from scratch in pure Python.
 
@@ -78,7 +80,7 @@ Because Principia is entirely dependency-free, no virtual environment or `pip in
 
 ```bash
 # Clone the repository
-git clone [https://github.com/YourUsername/principia.git](https://github.com/YourUsername/principia.git)
+git clone [https://github.com/KodingOnion/principia.git](https://github.com/KodingOnion/principia.git)
 cd principia
 ```
 
