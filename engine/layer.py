@@ -5,20 +5,15 @@ class RBFLayer:
     def __init__(self,nin=None,nout=None):
         self.nin = nin
         self.nout = nout
-        self.out = []
-
-        for i in range(0,self.nout):
-            self.out.append([])
-            for j in range(0,self.nin):
-                self.out[i].append(RBFEdge())
+        self.out = [[RBFEdge() for _ in range(self.nin)] for _ in range(self.nout)]
 
     def __call__(self,x):
         outputs = []
 
-        for i in range(0,self.nout):
+        for row in self.out:
             total = Value(0)
-            for j in range(0,self.nin):
-                total += (self.out[i][j](x[j]))
+            for edge, xj in zip(row, x):
+                total += edge(xj)
 
             outputs.append(total)
 
@@ -27,10 +22,10 @@ class RBFLayer:
     def parameters(self):
         params = []
 
-        for i in range(0,self.nout):
-            for j in range(0,self.nin):
-                params.append(self.out[i][j].mean)
-                params.append(self.out[i][j].width)
-                params.append(self.out[i][j].amplitude)
+        for row in self.out:
+            for edge in row:
+                params.append(edge.mean)
+                params.append(edge.width)
+                params.append(edge.amplitude)
 
         return params

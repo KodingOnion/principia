@@ -7,8 +7,8 @@ class KAN:
         self.layers = []
 
         if self.layer_sizes is not None:
-            for i in range(0,len(self.layer_sizes)-1):
-                self.layers.append(RBFLayer(self.layer_sizes[i],self.layer_sizes[i+1]))
+            for nin, nout in zip(self.layer_sizes, self.layer_sizes[1:]):
+                self.layers.append(RBFLayer(nin, nout))
 
     def __call__(self,x):
         current_data = x
@@ -22,18 +22,14 @@ class KAN:
         params = []
 
         for layer in self.layers:
-            for item in layer.parameters():
-                params.append(item)
+            params.extend(layer.parameters())
 
         return params
     
     def save(self,filename):
         params = self.parameters()
 
-        dataParams = []
-
-        for param in params:
-            dataParams.append(param.data)
+        dataParams = [param.data for param in params]
 
         dictionary = {"architecture" : self.layer_sizes, "weights" : dataParams}
 
