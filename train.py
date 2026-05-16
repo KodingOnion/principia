@@ -58,7 +58,7 @@ for current_epoch in range(1, EPOCHS + 1):
         print(f"EPOCH NUM: {current_epoch} - LOSS: {total_loss.data}")
 
 model_dir = Path("models")
-filename = model_dir / f"model_epoch_{current_epoch}_loss_{current_loss:.4f}_{time.time()}.json"
+filename = model_dir / f"XOR_model_epoch_{current_epoch}_loss_{current_loss:.4f}_{time.time()}.json"
 model.save(filename)
 
 print()

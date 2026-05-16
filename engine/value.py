@@ -125,6 +125,38 @@ class Value:
 
         return c
     
+    def __radd__(self, other):
+        return self.__add__(other)
+    
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __lt__(self, other):
+        # Unwrapping: get the raw number whether it's a Value or a float
+        other_val = other.data if isinstance(other, Value) else other
+        return self.data < other_val
+    
+    def __le__(self, other):
+        other_val = other.data if isinstance(other, Value) else other
+        return self.data <= other_val
+    
+    def __gt__(self, other):
+        other_val = other.data if isinstance(other, Value) else other
+        return self.data > other_val
+    
+    def __ge__(self, other):
+        other_val = other.data if isinstance(other, Value) else other
+        return self.data >= other_val
+    
+    def __eq__(self, other):
+        other_val = other.data if isinstance(other, Value) else other
+        return self.data == other_val
+
+    def __hash__(self):
+        # Use the unique memory address (id) as the hash.
+        # This guarantees that every Value instance is treated as a unique key.
+        return id(self)
+    
     def backward(self):
         """Run reverse-mode autodiff from this node through the full graph."""
         visited = set()

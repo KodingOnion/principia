@@ -98,14 +98,35 @@ python -m unittest discover -s tests
 
 ## 📂 Architecture Overview
 
-```text
+```
 principia/
-├── engine/
-│   ├── value.py      # Scalar autograd node and reverse-mode differentiation
-│   ├── rbf_edge.py   # Gaussian RBF edge parameterization 
-│   ├── layer.py      # Edge-matrix layer behavior and parameter flattening
-│   └── model.py      # Network construction, forward cascade, JSON serialization
-├── demos/
-│   └── demo_autograd.py # Interactive CLI demo
-└── tests/              # Comprehensive mathematical unit tests
+├── __init__.py              # Package initialization
+├── main.py                  # Main entry point
+├── load.py                  # Model loading utilities
+├── train.py                 # Training script
+├── visualise.py             # Visualization utilities
+├── project.md               # Project documentation
+│
+├── engine/                  # Core autograd and network implementation
+│   ├── value.py            # Scalar autograd node and reverse-mode differentiation
+│   ├── rbf_edge.py         # Gaussian RBF edge parameterization
+│   ├── layer.py            # Edge-matrix layer behavior and parameter flattening
+│   ├── model.py            # Network construction, forward cascade, JSON serialization
+│   └── optim.py            # Optimization algorithms
+│
+├── demos/                   # Interactive demonstrations
+│   └── demo_autograd.py    # Interactive CLI gradient descent demo
+│
+├── tests/                   # Comprehensive mathematical unit tests
+│   ├── __init__.py
+│   ├── test_value.py       # Autograd engine tests
+│   ├── test_rbf_edge.py    # RBF edge parameterization tests
+│   ├── test_layer.py       # Layer behavior tests
+│   ├── test_model.py       # Model construction tests
+│   └── test_optim.py       # Optimization algorithm tests
+│
+├── models/                  # Trained model checkpoints
+│   └── model_epoch_*.json   # Serialized model states
+│
+└── assets/                  # Project assets and resources
 ```
