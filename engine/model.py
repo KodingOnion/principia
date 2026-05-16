@@ -1,5 +1,6 @@
 from engine.layer import RBFLayer
 import json
+from pathlib import Path
 class KAN:
     def __init__(self,layer_sizes=None):
         self.layer_sizes = layer_sizes
@@ -36,7 +37,11 @@ class KAN:
 
         dictionary = {"architecture" : self.layer_sizes, "weights" : dataParams}
 
-        with open(filename,"w", encoding="utf-8") as file:
+        output_path = Path(filename)
+        if output_path.parent != Path("."):
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with output_path.open("w", encoding="utf-8") as file:
             json.dump(dictionary, file)
 
     @classmethod
