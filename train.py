@@ -33,6 +33,8 @@ optimizer = AdamOptimizer(model.parameters(), learning_rate=LEARNING_RATE)
 current_epoch = 0
 current_loss = 0
 
+print("--- TRAINING STARTED FOR XOR ---")
+
 for current_epoch in range(1, EPOCHS + 1):
     total_loss = Value(0.0)
 
@@ -51,7 +53,9 @@ for current_epoch in range(1, EPOCHS + 1):
     optimizer.step()
 
     current_loss = total_loss.data
-    print(f"EPOCH NUM: {current_epoch} - LOSS: {total_loss.data}")
+
+    if current_epoch % 100 == 0 or current_epoch == 1:
+        print(f"EPOCH NUM: {current_epoch} - LOSS: {total_loss.data}")
 
 model_dir = Path("models")
 filename = model_dir / f"model_epoch_{current_epoch}_loss_{current_loss:.4f}_{time.time()}.json"
