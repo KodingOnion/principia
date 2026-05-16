@@ -25,7 +25,7 @@ class RBFEdge:
             self.amplitude = Value(data)
 
     def __call__(self, x):
-        if type(x).__name__ != "Value":
+        if not isinstance(x, Value):
             raise TypeError("Incorrect type passed to class")
 
         data = self.amplitude * ((-self.width)*(x-self.mean)**2).exp()

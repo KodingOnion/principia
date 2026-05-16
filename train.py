@@ -1,5 +1,6 @@
 from engine.value import Value
 from engine.model import KAN
+from pathlib import Path
 
 model = KAN([2, 5, 1])
 
@@ -50,7 +51,8 @@ for i in range(0,EPOCHS):
 
     print(f"EPOCH NUM: {i+1} - LOSS: {total_loss.data}")
 
-filename = f"models\model_epoch_{current_epoch}_loss_{current_loss:.4f}.json"
+model_dir = Path("models")
+filename = model_dir / f"model_epoch_{current_epoch}_loss_{current_loss:.4f}.json"
 model.save(filename)
 
 print("\n--- INFERENCE TEST ---")
