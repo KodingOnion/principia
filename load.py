@@ -3,7 +3,7 @@
 from engine.model import KAN
 from engine.value import Value
 
-model = KAN.load(r"Z:\principia\models\model_epoch_1000_loss_0.0000.json")
+model = KAN.load(r"Z:\principia\models\model_epoch_1000_loss_0.0000_1778949609.3743508.json")
 
 print("\n--- INFERENCE TEST ---")
 

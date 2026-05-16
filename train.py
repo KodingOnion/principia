@@ -3,6 +3,8 @@
 from engine.value import Value
 from engine.model import KAN
 from pathlib import Path
+from engine.optim import AdamOptimizer
+import time
 
 model = KAN([2, 5, 1])
 
@@ -26,35 +28,33 @@ outputs = [[Value(v) for v in row] for row in outputs]
 EPOCHS = 1000
 LEARNING_RATE = 0.01
 
+optimizer = AdamOptimizer(model.parameters(), learning_rate=LEARNING_RATE)
+
 current_epoch = 0
 current_loss = 0
 
 for current_epoch in range(1, EPOCHS + 1):
     total_loss = Value(0.0)
 
+    # 1. Forward Pass (Calculate the loss)
     for inp, out in zip(inputs, outputs):
         MSE = (model(inp)[0] - out[0])**2
         total_loss += MSE
 
-    params = model.parameters()
+    # 2. Reset the gradients
+    optimizer.zero_grad()
 
-    for parameter in params:
-        parameter.gradient = 0.0
-
-    # Populate gradients for all graph nodes contributing to total_loss.
+    # 3. Backward Pass (Calculate the math)
     total_loss.backward()
 
-    params = model.parameters()
-
-    for parameter in params:
-        parameter.data -= parameter.gradient * LEARNING_RATE
+    # 4. Take the Adam Step (Update the weights)
+    optimizer.step()
 
     current_loss = total_loss.data
-
     print(f"EPOCH NUM: {current_epoch} - LOSS: {total_loss.data}")
 
 model_dir = Path("models")
-filename = model_dir / f"model_epoch_{current_epoch}_loss_{current_loss:.4f}.json"
+filename = model_dir / f"model_epoch_{current_epoch}_loss_{current_loss:.4f}_{time.time()}.json"
 model.save(filename)
 
 print()
