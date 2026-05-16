@@ -1,5 +1,5 @@
 from engine.layer import RBFLayer
-
+import json
 class KAN:
     def __init__(self,layer_sizes=None):
         self.layer_sizes = layer_sizes
@@ -25,3 +25,34 @@ class KAN:
                 params.append(item)
 
         return params
+    
+    def save(self,filename):
+        params = self.parameters()
+
+        dataParams = []
+
+        for param in params:
+            dataParams.append(param.data)
+
+        dictionary = {"architecture" : self.layer_sizes, "weights" : dataParams}
+
+        with open(filename,"w", encoding="utf-8") as file:
+            json.dump(dictionary, file)
+
+    @classmethod
+    def load(cls,filepath):
+        saved_data = []
+
+        with open(filepath, "r") as file:
+            saved_data = json.load(file)
+
+        architecture_list = saved_data["architecture"]
+        weights_list = saved_data["weights"]
+
+        model = cls(architecture_list)
+
+        params = model.parameters()
+        for param,weight in zip(params,weights_list):
+            param.data = weight
+
+        return model
