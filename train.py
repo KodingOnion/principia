@@ -26,11 +26,11 @@ LEARNING_RATE = 0.01
 current_epoch = 0
 current_loss = 0
 
-for i in range(0,EPOCHS):
+for i in range(EPOCHS):
     total_loss = Value(0.0)
 
-    for j in range(0,len(inputs)):
-        MSE = (model(inputs[j])[0] - outputs[j][0])**2
+    for inp, out in zip(inputs, outputs):
+        MSE = (model(inp)[0] - out[0])**2
         total_loss += MSE
 
     params = model.parameters()
