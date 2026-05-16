@@ -14,7 +14,7 @@ __pycache__/
 .idea/
 
 # Project specific
+train.py
 project.md
 load.py
-train.py
 models/
