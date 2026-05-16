@@ -49,3 +49,21 @@ principia/
 ```bash
 python -m unittest discover -s tests
 ```
+
+## Documentation Notes
+
+The codebase now includes structured, professional docstrings across core modules,
+training/inference scripts, and tests.
+
+- `engine/value.py`: scalar autograd node and reverse-mode differentiation flow
+- `engine/rbf_edge.py`: Gaussian RBF edge parameterization and forward equation
+- `engine/layer.py`: edge-matrix layer behavior and parameter flattening
+- `engine/model.py`: network construction, forward cascade, save/load serialization
+- `train.py`, `load.py`, `demos/demo_autograd.py`: runnable script intent and update flow
+
+Use Python's built-in help from a REPL to inspect API docs, for example:
+
+```python
+from engine.model import KAN
+help(KAN)
+```

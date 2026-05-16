@@ -1,3 +1,5 @@
+"""Train an RBF-KAN model on XOR and save the resulting checkpoint."""
+
 from engine.value import Value
 from engine.model import KAN
 from pathlib import Path
@@ -39,6 +41,7 @@ for current_epoch in range(1, EPOCHS + 1):
     for parameter in params:
         parameter.gradient = 0.0
 
+    # Populate gradients for all graph nodes contributing to total_loss.
     total_loss.backward()
 
     params = model.parameters()
@@ -56,15 +59,12 @@ model.save(filename)
 
 print()
 print("--- INFERENCE TEST ---")
-# Let's test the input [0, 1] - We expect an output close to 1.0
 test_input = [Value(0.0), Value(1.0)]
 
-# Run the forward pass
 prediction = model(test_input)[0]
 
 print(f"Raw Output: {prediction.data}")
 
-# Since it outputs a raw float, we threshold it at 0.5 to get a clean 0 or 1
 FINAL_ANSWER = 1 if prediction.data >= 0.5 else 0
 print(f"Network predicts: {FINAL_ANSWER}")
 

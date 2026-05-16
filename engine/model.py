@@ -1,8 +1,13 @@
 from engine.layer import RBFLayer
 import json
 from pathlib import Path
+
+
 class KAN:
+    """Kolmogorov-Arnold Network composed of stacked RBF layers."""
+
     def __init__(self,layer_sizes=None):
+        """Create the network from a layer-size specification."""
         self.layer_sizes = layer_sizes
         self.layers = []
 
@@ -11,6 +16,7 @@ class KAN:
                 self.layers.append(RBFLayer(nin, nout))
 
     def __call__(self,x):
+        """Run the input through each layer in sequence."""
         current_data = x
 
         for layer in self.layers:
@@ -19,6 +25,7 @@ class KAN:
         return current_data
     
     def parameters(self):
+        """Return all trainable parameters across all layers."""
         params = []
 
         for layer in self.layers:
@@ -27,6 +34,7 @@ class KAN:
         return params
     
     def save(self,filename):
+        """Persist architecture and parameter values to a JSON file."""
         params = self.parameters()
 
         dataParams = [param.data for param in params]
@@ -42,6 +50,7 @@ class KAN:
 
     @classmethod
     def load(cls,filepath):
+        """Restore a ``KAN`` instance from a JSON checkpoint."""
         saved_data = []
 
         with open(filepath, "r") as file:

@@ -1,3 +1,5 @@
+"""Unit tests for ``RBFEdge`` forward and backward behavior."""
+
 import unittest
 import math
 from engine.value import Value
@@ -6,8 +8,7 @@ from engine.rbf_edge import RBFEdge as rbf_edge
 class TestRBFEdge(unittest.TestCase):
 
     def test_initialization_type_promotion(self):
-        """Test if the edge initializes raw floats into Value objects."""
-        # We pass raw floats, but the class should promote them to Value objects
+        """Verify that scalar constructor inputs are promoted to Value objects."""
         edge = rbf_edge(mean=0.5, width=1.0, amplitude=2.0)
         
         self.assertEqual(type(edge.mean).__name__, "Value", "Mean must be wrapped in a Value object")
@@ -15,25 +16,25 @@ class TestRBFEdge(unittest.TestCase):
         self.assertEqual(type(edge.amplitude).__name__, "Value", "Amplitude must be wrapped in a Value object")
 
     def test_forward_pass_math(self):
-        """Test the exact math of the Gaussian equation."""
+        """Verify the Gaussian forward equation."""
         edge = rbf_edge(mean=0.0, width=1.0, amplitude=2.0)
         x = Value(1.0)
         
-        y = edge(x) # This triggers __call__
+        y = edge(x)
 
         # Math: 2.0 * exp(-1.0 * (1.0 - 0.0)^2) = 2.0 * exp(-1.0)
         expected_val = 2.0 * math.exp(-1.0)
         self.assertAlmostEqual(y.data, expected_val, places=4, msg="Forward Gaussian math is incorrect")
 
     def test_backward_pass_calculus(self):
-        """Test the chain rule flowing through the entire Gaussian equation."""
+        """Verify gradients through the full Gaussian expression."""
         edge = rbf_edge(mean=0.5, width=1.0, amplitude=2.0)
         x = Value(1.5)
 
         y = edge(x)
-        y.backward() # Trigger the master topological sort
+        y.backward()
 
-        # Let's calculate the expected calculus by hand:
+        # Hand-derived reference gradients:
         # y = w * exp(-g * (x - m)^2)
         # x = 1.5, m = 0.5 -> (x-m) = 1.0
         # g = 1.0 -> -g*(x-m)^2 = -1.0
@@ -49,10 +50,10 @@ class TestRBFEdge(unittest.TestCase):
         self.assertAlmostEqual(x.gradient, expected_dx, places=4, msg="Input X gradient incorrect")
 
     def test_type_checking(self):
-        """Test if __call__ correctly rejects non-Value inputs."""
+        """Verify that non-Value inputs are rejected."""
         edge = rbf_edge()
         with self.assertRaises(TypeError):
-            edge(5.0) # Should crash because 5.0 is a float, not a Value object
+            edge(5.0)
 
 if __name__ == '__main__':
     unittest.main()

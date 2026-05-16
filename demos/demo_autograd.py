@@ -1,3 +1,5 @@
+"""Interactive gradient-descent demo for y = (x - 3)^2."""
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -12,9 +14,12 @@ print('')
 
 for i in range(0,1000):
     y = (x-3)**2
+
+    # Differentiate with respect to the current scalar x.
     y.backward()
 
     print(x.data,y.data)
 
+    # Basic gradient-descent parameter update.
     x.data += (x.gradient * -learning_rate)
     x.gradient = 0.0
