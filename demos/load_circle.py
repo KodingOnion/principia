@@ -1,11 +1,14 @@
 """Load a saved KAN model and verify circular decision boundaries."""
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine.model import KAN
 from engine.value import Value
 
 # 1. Load the model. Update the string below to point to your specific 
 # .json checkpoint in the models/ directory.
-MODEL_PATH = "Z:\principia\models\donut_model_epoch_1000_loss_0.0000_1778956139.7772317.json"
+MODEL_PATH = "Z:\principia\models\donut_model_epoch_1000_loss_0.0000_1779006611.9611297.json"
 
 print(f"\n--- LOADING MODEL: {MODEL_PATH} ---")
 model = KAN.load(MODEL_PATH)

@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from engine.value import Value
 from engine.model import KAN
 from engine.optim import AdamOptimizer
