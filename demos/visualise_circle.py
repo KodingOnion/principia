@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine.model import KAN
 from engine.value import Value
-model = KAN.load(r"Z:\principia\models\donut_model_epoch_1000_loss_0.0000_1779006611.9611297.json")
+model = KAN.load(r"C:\Users\jakep\principia\models\donut_model_epoch_1000_loss_0.0000_1779184118.438265.json")
 
 xx = numpy.linspace(-1.1,1.1,50)
 yy = numpy.linspace(-1.1,1.1,50)
@@ -23,7 +23,7 @@ for i in range(numpy_mesh[0].shape[0]):
         zz[i][j] = model([Value(numpy_mesh[0][i][j]), Value(numpy_mesh[1][i][j])])[0].data
 
 plt.contourf(xx, yy, zz, levels=20)
-plt.title("KAN Decision Boundary")
+plt.title("KAN Decision Boundary - Circle")
 plt.xlabel("Input 1")
 plt.ylabel("Input 2")
 plt.colorbar(label='Output Value')

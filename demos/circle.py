@@ -45,7 +45,7 @@ optimizer = AdamOptimizer(model.parameters(), learning_rate=LEARNING_RATE)
 current_epoch = 0
 current_loss = 0
 
-print("--- TRAINING STARTED FOR XOR ---")
+print("--- TRAINING STARTED FOR CIRCLE ---")
 
 for current_epoch in range(1, EPOCHS + 1):
     random.shuffle(data)

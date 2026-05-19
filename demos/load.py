@@ -4,7 +4,7 @@ from engine.model import KAN
 from engine.value import Value
 
 print("\n--- LOADING MODEL ---")
-model = KAN.load(r"Z:\principia\models\model_epoch_1000_loss_0.0000_1778949609.3743508.json")
+model = KAN.load(r"C:\Users\jakep\principia\models\model_epoch_1000_loss_0.0000_1779181739.3105779.json")
 print("Model loaded successfully.")
 
 print("\n--- INFERENCE TEST ---")

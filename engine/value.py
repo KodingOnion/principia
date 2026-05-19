@@ -1,6 +1,5 @@
 import math
 
-
 class Value:
     """Scalar value node used to build and differentiate computation graphs.
 

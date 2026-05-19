@@ -98,6 +98,16 @@ python -m unittest discover -s tests
 
 ---
 
+## ⏳ TODO
+
+### Add tensors extend Value class
+This allows for large performance improvements by calculating gradients at once rather than iterating through the entire network many times for each training loop.
+
+### Add multithreading in python (async)
+Improves performance by allowing processor to run multiple calculations at once, greatly increasing performance.
+
+---
+
 ## 📂 Architecture Overview
 
 ```
