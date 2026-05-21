@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine.model import KAN
 from engine.value import Value
-model = KAN.load(r"C:\Users\jakep\principia\models\model_epoch_1000_loss_0.0000_1779181739.3105779.json")
+model = KAN.load(r"C:\Users\jakep\principia\models\model_epoch_1000_loss_0.0000_1779356780.4818048.json")
 
 xx = numpy.linspace(-0.5,1.5,50)
 yy = numpy.linspace(-0.5,1.5,50)
