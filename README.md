@@ -2,84 +2,101 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.12%2B-blue.svg?style=flat&logo=python&logoColor=white" alt="Python Version">
-  <img src="https://img.shields.io/badge/dependencies-numpy-blue.svg" alt="Dependencies">
-  <img src="https://img.shields.io/badge/tests-unittest-brightgreen.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/backend-numpy-blue.svg?logo=numpy&logoColor=white" alt="Dependencies">
+  <img src="https://github.com/KodingOnion/principia/actions/workflows/tests.yml/badge.svg" alt="Build Status">
 </p>
 
-Principia is a lightweight neural-network playground built from scratch in Python. It includes:
+Principia is a high-performance, **from-scratch** neural network library. While the original `v1` prototype focused on scalar-based autograd, the modern engine has been fully re-engineered to utilize **vectorized NumPy operations** for production-grade performance while maintaining total transparency of the underlying graph mechanics.
 
-- A NumPy-backed `Tensor` class with reverse-mode autodiff
-- A minimal module system (`Module`, `Linear`, `KANLayer`, `KAN`)
-- Adam optimization and MSE loss
-- Demo scripts for linear regression and sine approximation
-- A legacy scalar autograd implementation under `engine/v1`
+---
 
-## Demo
+## ⚡ The Modern Engine: `Tensor`
+
+At the heart of Principia is the `Tensor` class—a NumPy-backed autograd engine. Unlike standard scalar-based implementations, `Tensor` handles multidimensional arrays, broadcasted gradients, and matrix multiplication (`matmul`) natively.
+
+### API at a Glance
+The API follows the same intuitive path-tracking logic as modern frameworks, keeping the implementation logic entirely visible:
+
+```python
+from engine.tensor import Tensor
+
+# Tensors wrap NumPy arrays
+a = Tensor([[1.0, 2.0], [3.0, 4.0]])
+b = Tensor([[0.5, 0.5], [0.5, 0.5]])
+
+# Matrix operations with automatic graph construction
+c = a @ b
+
+# Reverse-mode autodiff via topological sort
+c.backward()
+
+print(f"Gradient of a:\n{a.grad}")
+```
+
+### Key Engineering Features
+* **Vectorized Autodiff:** Full support for `reshape`, `sum` (with axis-handling), and `matmul`.
+* **Dynamic Broadcasting:** A robust `_unbroadcast` utility that ensures gradients are correctly reduced to match input shapes during backward passes.
+* **Modern NN Modules:** A `Module` base class facilitates parameter harvesting and clean model architecture (Linear layers, KANLayers).
+* **Optimization:** Includes a bias-corrected `AdamOptimiser` implementation.
+
+---
+
+## 🧠 Kolmogorov-Arnold Networks (KAN)
+
+Principia showcases a native implementation of Kolmogorov-Arnold Networks, swapping the static linear weights of traditional MLPs for learnable **Radial Basis Functions**.
+
+### RBF Edge Mathematics
+Each connection computes:
+```math
+\phi(x) = w \cdot e^{-\gamma (x - \mu)^2}
+```
+
+The engine treats $w$, $\gamma$, and $\mu$ as first-class learnable parameters, optimized via the Adam engine to fit complex, non-linear signals like sine waves.
 
 <p align="center">
-  <img src="assets/demo.gif" alt="Principia demo" />
+  <img src="assets/demo.gif" alt="Terminal Gradient Descent Demo">
 </p>
 
-## Project Structure
+---
+
+## 🚀 Quickstart
+
+### Installation
+Principia requires `numpy`.
+
+```bash
+git clone [https://github.com/KodingOnion/principia.git](https://github.com/KodingOnion/principia.git)
+cd principia
+python -m pip install numpy matplotlib
+```
+
+### Running the Demos
+Experience the difference between standard linear approximation and the KAN sine approximation:
+
+```bash
+# Linear regression
+python demos/linear_network.py
+
+# KAN-based sine approximation
+python demos/sin_network.py
+
+# Legacy scalar demonstration
+python demos/v1/demo_autograd.py
+```
+
+## 📂 Architecture Overview
 
 ```text
 principia/
 ├── engine/
-│   ├── tensor.py         # Core Tensor + autodiff engine
-│   ├── module.py         # Base Module class and gradient reset
-│   ├── linear.py         # Linear layer
-│   ├── KANLayer.py       # RBF-based KAN layer
-│   ├── KAN.py            # Multi-layer KAN wrapper
-│   ├── adam_optim.py     # Adam optimizer
-│   ├── mse.py            # Mean squared error loss
-│   └── v1/               # Legacy scalar autograd implementation
-├── demos/
-│   ├── linear_network.py # Linear model training demo
-│   ├── sin_network.py    # KAN sine approximation demo
-│   └── v1/demo_autograd.py
-├── tests/
-│   ├── test_tensor.py
-│   ├── test_nn.py
-│   └── v1/
-└── assets/
-    └── demo.gif
+│   ├── tensor.py         # Modern NumPy-accelerated Autograd Engine
+│   ├── KAN.py            # RBF-KAN network architecture
+│   ├── adam_optim.py     # Adam Optimizer implementation
+│   ├── module.py         # Base class for NN modules
+│   └── v1/               # Legacy scalar-based research engine
+├── demos/                # Training demonstrations
+└── tests/                # Mathematical unit tests (Tensor/NN)
 ```
 
-## Quickstart
-
-### 1) Clone
-
-```bash
-git clone https://github.com/KodingOnion/principia.git
-cd principia
-python -m pip install numpy
-```
-
-### 2) Install dependency
-
-```bash
-python -m pip install numpy
-```
-
-> `demos/sin_network.py` also uses `matplotlib` for plotting.
-
-### 3) Run demos
-
-```bash
-python demos/linear_network.py
-python demos/sin_network.py
-python demos/v1/demo_autograd.py
-```
-
-## Run Tests
-
-From the repository root:
-
-```bash
-python -m unittest discover -s tests
-```
-
-## Notes
-
-- The modern engine is in `engine/tensor.py` and is used by current NN components.
-- The `engine/v1` package is kept for the original scalar `Value`-based experiments and demos.
+## Engineering Note
+The `engine/v1/` directory is maintained for historical clarity. All new neural network components are built upon the high-performance `engine/tensor.py` backend.
