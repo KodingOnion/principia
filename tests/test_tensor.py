@@ -3,6 +3,7 @@
 import unittest
 import numpy as np
 from engine.tensor import Tensor
+from engine.mse import mse_loss
 
 
 class TestTensorAutograd(unittest.TestCase):
@@ -221,6 +222,42 @@ class TestTensorAutograd(unittest.TestCase):
         # Backward pass: gradient of sum is 1.0 distributed to every element
         np.testing.assert_array_equal(a.grad, np.ones_like(a.data))
 
+    # --- MISSING TENSOR OPS (RESHAPE & EXP) ---
+    
+    def test_reshape_forward_and_backward(self):
+        a = Tensor([[1.0, 2.0, 3.0, 4.0]])
+        b = a.reshape((2, 2))
+        
+        np.testing.assert_array_equal(b.data, np.array([[1.0, 2.0], [3.0, 4.0]]))
+        b.backward()
+        
+        # Gradient should reshape perfectly back to the original 1x4
+        np.testing.assert_array_equal(a.grad, np.ones_like(a.data))
 
+    def test_exp_forward_and_backward(self):
+        a = Tensor([1.0, 2.0])
+        b = a.exp()
+        
+        # Forward pass: e^1, e^2
+        np.testing.assert_array_almost_equal(b.data, np.array([2.7182818, 7.3890561]), decimal=5)
+        b.backward()
+        
+        # Backward pass: The local derivative of e^x is e^x. 
+        np.testing.assert_array_almost_equal(a.grad, b.data, decimal=5)
+
+    def test_mse_loss_forward_and_backward(self):
+        # Assuming mse_loss is imported or defined in the test file
+        predictions = Tensor([2.0, 4.0, 6.0])
+        targets = Tensor([1.0, 4.0, 8.0])
+        
+        # Diff: [1.0, 0.0, -2.0] -> Sq: [1.0, 0.0, 4.0] -> Sum: 5.0 -> Mean: 1.666...
+        loss = mse_loss(predictions, targets)
+        np.testing.assert_almost_equal(loss.data, 1.6666667, decimal=5)
+        
+        loss.backward()
+        # d/dx of MSE = 2 * (preds - targets) / n
+        expected_grad = np.array([0.6666666, 0.0, -1.3333333])
+        np.testing.assert_array_almost_equal(predictions.grad, expected_grad, decimal=5)
+    
 if __name__ == "__main__":
     unittest.main()
