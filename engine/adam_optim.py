@@ -47,4 +47,4 @@ class AdamOptimiser:
 
     def zero_grad(self):
         for parameter in self.parameters:
-            parameter.gradient = np.zeros_like(parameter.data)
+            parameter.grad = np.zeros_like(parameter.grad)

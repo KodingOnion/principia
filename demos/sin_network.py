@@ -1,12 +1,6 @@
-import os
-import sys
+"""Train a KAN model to approximate a sine wave and plot results."""
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from engine.KAN import KAN
-from engine.tensor import Tensor
-from engine.mse import mse_loss
-from engine.adam_optim import AdamOptimiser
+from principia import AdamOptimiser, KAN, Tensor, mse_loss
 import numpy as np
 
 LEARNING_RATE = 0.01
