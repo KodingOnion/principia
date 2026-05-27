@@ -20,7 +20,7 @@ def circle_generator(num_points):
     return inputs, outputs
 
 
-def main(num_points=10000, learning_rate=0.01, epochs=100000, plot_interval=10, show_plot=True):
+def main(num_points=10000, learning_rate=0.01, epochs=1000, plot_interval=10, show_plot=True):
     x, y = circle_generator(num_points)
 
     x = Tensor(np.array(x))
