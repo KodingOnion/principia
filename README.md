@@ -8,7 +8,7 @@
 
 A lightweight automatic differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) implementation built from scratch in pure Python and NumPy.
 
-Principia explores gradient-based learning by implementing a custom scalar-level autograd system. Instead of relying on high-level frameworks like PyTorch, this engine constructs Directed Acyclic Graphs (DAGs) on the fly to track mathematical operations and applies reverse-mode differentiation via topological sorting.
+Principia explores gradient-based learning through two implementations: a custom scalar-level autograd system in `engine/v1` and a NumPy-backed tensor engine in `engine/tensor.py`. Instead of relying on high-level frameworks like PyTorch, the project constructs Directed Acyclic Graphs (DAGs) on the fly to track mathematical operations and applies reverse-mode differentiation via topological sorting.
 
 ---
 
