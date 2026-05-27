@@ -1,4 +1,8 @@
 """Principia package root."""
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine.adam_optim import AdamOptimiser
 from engine.KAN import KAN

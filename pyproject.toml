@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "principia"
+version = "0.1.0"
+authors = [
+  { name="Jake Portnoi" },
+]
+description = "A custom autograd engine and Kolmogorov-Arnold Network implementation."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+]
+
+[tool.setuptools]
+packages = ["principia"]

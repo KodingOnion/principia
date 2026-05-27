@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+principia/__init__.py
+principia.egg-info/PKG-INFO
+principia.egg-info/SOURCES.txt
+principia.egg-info/dependency_links.txt
+principia.egg-info/requires.txt
+principia.egg-info/top_level.txt
+tests/test_nn.py
+tests/test_tensor.py
