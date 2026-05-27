@@ -5,11 +5,6 @@ The layer stores trainable center locations ``mu``, scale parameters
 reduction over the center dimension followed by summation over input features.
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from engine.module import Module
 from engine.tensor import Tensor
 import numpy as np

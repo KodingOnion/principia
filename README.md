@@ -52,6 +52,7 @@ principia/
 ```bash
 git clone https://github.com/KodingOnion/principia.git
 cd principia
+python -m pip install numpy
 ```
 
 ### 2) Install dependency
