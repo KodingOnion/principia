@@ -5,15 +5,8 @@ layer sizes and expose a simple functional API for forward evaluation and
 parameter harvesting.
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from engine.module import Module
-from engine.tensor import Tensor
 from engine.KANLayer import KANLayer
-import numpy as np
 import itertools
 
 

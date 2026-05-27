@@ -2,13 +2,13 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/python-3.12%2B-blue.svg?style=flat&logo=python&logoColor=white" alt="Python Version">
-    <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg" alt="Dependencies">
+    <img src="https://img.shields.io/badge/dependencies-1-brightgreen.svg" alt="Dependencies">
     <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status">
 </p>
 
-A lightweight, **zero-dependency** automatic differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) implementation built from scratch in pure Python.
+A lightweight automatic differentiation engine and Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN) implementation built from scratch in pure Python and NumPy.
 
-Principia explores gradient-based learning by implementing a custom scalar-level autograd system. Instead of relying on external tensor libraries like PyTorch or NumPy, this engine constructs Directed Acyclic Graphs (DAGs) on the fly to track mathematical operations and applies reverse-mode differentiation via topological sorting.
+Principia explores gradient-based learning through two implementations: a custom scalar-level autograd system in `engine/v1` and a NumPy-backed tensor engine in `engine/tensor.py`. Instead of relying on high-level frameworks like PyTorch, the project constructs Directed Acyclic Graphs (DAGs) on the fly to track mathematical operations and applies reverse-mode differentiation via topological sorting.
 
 ---
 
@@ -20,7 +20,7 @@ At the core of Principia is the `Value` class, which wraps standard Python scala
 The API is designed to be intuitive and mimic standard tensor operations:
 
 ```python
-from engine.value import Value
+from engine.v1.value import Value
 
 # Initialize scalars with gradients
 a = Value(2.0)
@@ -76,18 +76,19 @@ Where the autograd engine independently tracks and updates the gradients for:
 ## 🚀 Quickstart
 
 ### Installation
-Because Principia is entirely dependency-free, no virtual environment or `pip install` is required.
+Principia uses a minimal dependency set.
 
 ```bash
 # Clone the repository
-git clone [https://github.com/KodingOnion/principia.git](https://github.com/KodingOnion/principia.git)
+git clone https://github.com/KodingOnion/principia.git
 cd principia
+python -m pip install numpy
 ```
 
 ### Running the Engine
 Execute the interactive gradient descent demonstration:
 ```bash
-python demos/demo_autograd.py
+python demos/v1/demo_autograd.py
 ```
 
 ### Running the Test Suite
@@ -112,33 +113,22 @@ Improves performance by allowing processor to run multiple calculations at once,
 
 ```
 principia/
-├── __init__.py              # Package initialization
-├── main.py                  # Main entry point
-├── load.py                  # Model loading utilities
-├── train.py                 # Training script
-├── visualise.py             # Visualization utilities
-├── project.md               # Project documentation
-│
-├── engine/                  # Core autograd and network implementation
-│   ├── value.py            # Scalar autograd node and reverse-mode differentiation
-│   ├── rbf_edge.py         # Gaussian RBF edge parameterization
-│   ├── layer.py            # Edge-matrix layer behavior and parameter flattening
-│   ├── model.py            # Network construction, forward cascade, JSON serialization
-│   └── optim.py            # Optimization algorithms
-│
-├── demos/                   # Interactive demonstrations
-│   └── demo_autograd.py    # Interactive CLI gradient descent demo
-│
-├── tests/                   # Comprehensive mathematical unit tests
-│   ├── __init__.py
-│   ├── test_value.py       # Autograd engine tests
-│   ├── test_rbf_edge.py    # RBF edge parameterization tests
-│   ├── test_layer.py       # Layer behavior tests
-│   ├── test_model.py       # Model construction tests
-│   └── test_optim.py       # Optimization algorithm tests
-│
-├── models/                  # Trained model checkpoints
-│   └── model_epoch_*.json   # Serialized model states
-│
-└── assets/                  # Project assets and resources
+├── __init__.py             # Package initialization
+├── main.py                 # Entry point placeholder
+├── engine/                 # Core tensor/autograd + KAN components
+│   ├── tensor.py
+│   ├── module.py
+│   ├── linear.py
+│   ├── KANLayer.py
+│   ├── KAN.py
+│   └── v1/                 # Scalar autograd implementation and legacy KAN stack
+├── demos/                  # Interactive demos
+│   ├── linear_network.py
+│   ├── sin_network.py
+│   └── v1/
+├── tests/                  # Unit tests for tensor engine and v1 modules
+│   ├── test_tensor.py
+│   ├── test_nn.py
+│   └── v1/
+└── assets/                 # Project assets and media
 ```
