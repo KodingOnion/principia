@@ -20,13 +20,13 @@ def circle_generator(num_points):
     return inputs, outputs
 
 
-def main(num_points=10000, learning_rate=0.01, epochs=1000, plot_interval=10, show_plot=True):
+def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, batch_size=16,show_plot=True):
     x, y = circle_generator(num_points)
 
     x = Tensor(np.array(x))
     y = Tensor(np.array(y).reshape(-1, 1))
 
-    model = KAN([2, 12, 1], 24)
+    model = KAN([2, 8, 8, 1], 12)
     optimiser = AdamOptimiser(model.parameters(), learning_rate)
 
     xx = np.linspace(-1, 1, 50)
@@ -40,15 +40,22 @@ def main(num_points=10000, learning_rate=0.01, epochs=1000, plot_interval=10, sh
     ax.set_xlim(-1, 1)
     ax.set_ylim(-1, 1)
     ax.set_aspect("equal", adjustable="box")
+    cbar = None
     plt.show(block=False)
 
     for i in range(1, epochs + 1):
-        predictions = model(x)
-        mse = mse_loss(predictions, y)
 
-        model.zero_grad()
-        mse.backward()
-        optimiser.step()
+        for j in range(0, len(x.data), batch_size):
+            # Slice the raw arrays and wrap them
+            x_batch = Tensor(x.data[j:j+batch_size])
+            y_batch = Tensor(y.data[j:j+batch_size])
+
+            predictions = model(x_batch)
+            mse = mse_loss(predictions, y_batch) # Use the batched labels!
+
+            model.zero_grad()
+            mse.backward()
+            optimiser.step()
 
         if i == 1 or i % plot_interval == 0:
             print(f"EPOCH NUM:{i} LOSS:{mse.data}")
@@ -56,8 +63,15 @@ def main(num_points=10000, learning_rate=0.01, epochs=1000, plot_interval=10, sh
             mesh_preds = model(input_tensor)
             final_map = mesh_preds.reshape((50, 50)).data
 
+            if cbar is not None:
+                cbar.remove()
+
             ax.clear()
-            ax.contourf(xx, yy, final_map, levels=20, vmin=-1, vmax=1, cmap="coolwarm")
+
+            contour = ax.contourf(xx, yy, final_map, levels=20, vmin=-1, vmax=1, cmap="coolwarm")
+            
+            cbar = fig.colorbar(contour, ax=ax, label='Network Output')
+            
             ax.set_xlim(-1, 1)
             ax.set_ylim(-1, 1)
             ax.set_aspect("equal", adjustable="box")

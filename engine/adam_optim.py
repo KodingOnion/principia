@@ -29,6 +29,8 @@ class AdamOptimiser:
             if parameter.grad is None:
                 continue
 
+            parameter.grad = np.clip(parameter.grad, -1.0, 1.0)
+
             m_prev = self.m[parameter]
             v_prev = self.v[parameter]
 
