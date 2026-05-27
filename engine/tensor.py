@@ -143,34 +143,33 @@ class Tensor:
 
         return result
     
-    def sum(self):
+    def sum(self, axis=None, keepdims=False):
         result = Tensor(
-            data=np.sum(self.data),
+            data=np.sum(self.data, axis=axis, keepdims=keepdims),
             children=[self],
-            op='sum'
+            op="sum"
         )
-
+        
         def _backward():
-            self.grad += np.ones_like(self.data) * result.grad
-
+            grad = result.grad
+            # If we summed across a specific axis, we have to expand the gradient's 
+            # dimensions back out so it can broadcast correctly to self.grad
+            if axis is not None and not keepdims:
+                grad = np.expand_dims(grad, axis=axis)
+            self.grad += np.ones_like(self.data) * grad
+            
         result._backward = _backward
-
         return result
     
-    def mse_loss(self, predictions, targets):
-        """
-        Calculates the Mean Squared Error between two Tensors.
-        """
-        # 1. Calculate the squared differences
-        differences = predictions - targets
-        squared_differences = differences ** 2
+    def reshape(self, new_shape):
+        result = Tensor(
+            data=self.data.reshape(new_shape),
+            children=[self],
+            op="reshape"
+        )
         
-        # 2. Sum them all up (using your new method!)
-        total_loss = squared_differences.sum()
-        
-        # 3. Divide by the total number of elements to get the mean
-        # (We use targets.data.size to get the total number of items in the numpy array)
-        n = targets.data.size
-        mean_loss = total_loss * (1.0 / n)
-        
-        return mean_loss
+        def _backward():
+            self.grad += result.grad.reshape(self.grad.shape)
+            
+        result._backward = _backward
+        return result

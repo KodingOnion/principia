@@ -1,7 +1,7 @@
 """Unit tests for the scalar autograd ``Value`` engine."""
 
 import unittest
-from engine.value import Value
+from engine.v1.value import Value
 
 class TestValueEngine(unittest.TestCase):
 

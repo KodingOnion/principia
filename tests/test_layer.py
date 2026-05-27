@@ -1,8 +1,8 @@
 """Unit tests for ``RBFLayer`` construction, forward pass, and gradients."""
 
 import unittest
-from engine.value import Value
-from engine.layer import RBFLayer
+from engine.v1.value import Value
+from engine.v1.layer import RBFLayer
 
 class TestRBFLayer(unittest.TestCase):
 

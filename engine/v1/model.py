@@ -1,4 +1,4 @@
-from engine.layer import RBFLayer
+from engine.v1.layer import RBFLayer
 import json
 from pathlib import Path
 

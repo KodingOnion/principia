@@ -3,8 +3,8 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from engine.model import KAN
-from engine.value import Value
+from engine.v1.model import KAN
+from engine.v1.value import Value
 
 # 1. Load the model. Update the string below to point to your specific 
 # .json checkpoint in the models/ directory.

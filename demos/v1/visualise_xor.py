@@ -6,8 +6,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from engine.model import KAN
-from engine.value import Value
+from engine.v1.model import KAN
+from engine.v1.value import Value
 model = KAN.load(r"Z:\principia\models\XOR_model_epoch_1000_loss_0.0000_1779794052.6080422.json")
 
 xx = numpy.linspace(-0.5,1.5,50)

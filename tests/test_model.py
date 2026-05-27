@@ -3,8 +3,8 @@
 import unittest
 import os
 import json
-from engine.value import Value
-from engine.model import KAN
+from engine.v1.value import Value
+from engine.v1.model import KAN
 
 class TestKANModel(unittest.TestCase):
 

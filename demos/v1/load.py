@@ -1,7 +1,7 @@
 """Load a saved KAN model and run simple inference examples."""
 
-from engine.model import KAN
-from engine.value import Value
+from engine.v1.model import KAN
+from engine.v1.value import Value
 
 print("\n--- LOADING MODEL ---")
 model = KAN.load(r"C:\Users\jakep\principia\models\model_epoch_1000_loss_0.0000_1779181739.3105779.json")

@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from engine.value import Value
+from engine.v1.value import Value
 
 print('==============================================')
 print('Find local minimum on y=(x-3)^2\n')

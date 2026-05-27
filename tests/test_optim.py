@@ -1,6 +1,6 @@
 import unittest
-from engine.value import Value
-from engine.optim import AdamOptimizer
+from engine.v1.value import Value
+from engine.v1.optim import AdamOptimizer
 
 class TestAdamOptimizer(unittest.TestCase):
 

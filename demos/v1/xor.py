@@ -4,10 +4,10 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from engine.value import Value
-from engine.model import KAN
+from engine.v1.value import Value
+from engine.v1.model import KAN
 from pathlib import Path
-from engine.optim import AdamOptimizer
+from engine.v1.optim import AdamOptimizer
 import time
 
 model = KAN([2, 5, 1])
