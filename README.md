@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.12%2B-blue.svg?style=flat&logo=python&logoColor=white" alt="Python Version">
-  <img src="https://img.shields.io/badge/dependency-numpy-blue.svg" alt="Dependency">
+  <img src="https://img.shields.io/badge/dependencies-numpy-blue.svg" alt="Dependencies">
   <img src="https://img.shields.io/badge/tests-unittest-brightgreen.svg" alt="Tests">
 </p>
 
