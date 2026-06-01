@@ -20,11 +20,12 @@ def circle_generator(num_points):
     return inputs, outputs
 
 
-def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, batch_size=16,show_plot=True):
+def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, batch_size=12,show_plot=True):
     x, y = circle_generator(num_points)
 
     x = Tensor(np.array(x))
     y = Tensor(np.array(y).reshape(-1, 1))
+
 
     model = KAN([2, 8, 8, 1], 12)
     optimiser = AdamOptimiser(model.parameters(), learning_rate)
