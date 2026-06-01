@@ -25,9 +25,10 @@ class KANLayer(Module):
         return [self.mu, self.gamma, self.w]
 
     def __call__(self, x):
+
         x_reshaped = x.reshape((x.data.shape[0], x.data.shape[1], 1, 1))
 
-        activations = self.w * ((-self.gamma) * ((x_reshaped - self.mu) ** 2)).exp()
+        activations = self.w * ((-self.gamma.exp()) * ((x_reshaped - self.mu) ** 2)).exp()
 
         activations = activations.sum(axis=3)
         activations = activations.sum(axis=1)
