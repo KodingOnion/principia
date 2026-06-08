@@ -12,7 +12,7 @@ def circle_generator(num_points):
         x = random.uniform(-1.0, 1.0)
         y = random.uniform(-1.0, 1.0)
         dist = (x**2 + y**2) ** 0.5
-        output = 0 if dist > 0.6 else 1
+        output = 0 if (dist > 0.6 or dist < 0.2) else 1
 
         inputs.append([x, y])
         outputs.append([output])
@@ -47,12 +47,11 @@ def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, bat
     for i in range(1, epochs + 1):
 
         for j in range(0, len(x.data), batch_size):
-            # Slice the raw arrays and wrap them
             x_batch = Tensor(x.data[j:j+batch_size])
             y_batch = Tensor(y.data[j:j+batch_size])
 
             predictions = model(x_batch)
-            mse = mse_loss(predictions, y_batch) # Use the batched labels!
+            mse = mse_loss(predictions, y_batch)
 
             model.zero_grad()
             mse.backward()

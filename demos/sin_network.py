@@ -4,9 +4,9 @@ from principia import AdamOptimiser, KAN, Tensor, mse_loss
 import numpy as np
 import matplotlib.pyplot as plt
 
-def main(learning_rate=0.01, epochs=2500, plot_interval=50, show_plot=True):
+def main(learning_rate=0.01, epochs=100000, plot_interval=50, show_plot=True):
     X_data = np.linspace(-np.pi, np.pi, 100).reshape(100, 1)
-    Y_data = np.sin(X_data)
+    Y_data = np.sin(X_data * 10) + np.sin(X_data*3)*0.5
     X = Tensor(X_data)
     Y = Tensor(Y_data)
 
