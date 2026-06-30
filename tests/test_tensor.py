@@ -2,8 +2,7 @@
 
 import unittest
 import numpy as np
-from engine.tensor import Tensor
-from engine.mse import mse_loss
+from principia import Tensor, mse_loss
 
 
 class TestTensorAutograd(unittest.TestCase):

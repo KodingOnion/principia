@@ -10,7 +10,7 @@ from engine.tensor import Tensor
 import numpy as np
 
 
-class KANLayer(Module):
+class RBFLayer(Module):
     def __init__(self, in_features, out_features, num_centers):
         grid_shape = (1, in_features, out_features, num_centers)
 

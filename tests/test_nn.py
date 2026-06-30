@@ -1,10 +1,6 @@
 import unittest
 import numpy as np
-from engine.tensor import Tensor
-# Adjust these imports based on your file structure
-from engine.linear import Linear
-from engine.KANLayer import KANLayer
-from engine.KAN import KAN
+from principia import Tensor, Linear, RBFLayer, Sequential
 
 class TestNeuralNetworkArchitecture(unittest.TestCase):
 
@@ -45,11 +41,11 @@ class TestNeuralNetworkArchitecture(unittest.TestCase):
         np.testing.assert_array_equal(model.b.grad, np.zeros_like(model.b.grad))
 
 
-    # --- KAN LAYER TESTS ---
+    # --- RBF LAYER TESTS ---
 
-    def test_kan_layer_forward_geometry(self):
+    def test_rbf_layer_forward_geometry(self):
         in_feat, out_feat, centers = 2, 4, 10
-        model = KANLayer(in_features=in_feat, out_features=out_feat, num_centers=centers)
+        model = RBFLayer(in_features=in_feat, out_features=out_feat, num_centers=centers)
         
         # Batch of 3
         x = Tensor(np.random.randn(3, in_feat)) 
@@ -67,14 +63,17 @@ class TestNeuralNetworkArchitecture(unittest.TestCase):
             self.assertEqual(param.data.shape, expected_grid_shape)
 
 
-    # --- KAN WRAPPER TESTS ---
+    # --- SEQUENTIAL WRAPPER TESTS ---
 
-    def test_kan_network_sequence_and_aggregation(self):
-        layer_sizes = [2, 5, 3] # Input=2, Hidden=5, Output=3
+    def test_sequential_network_sequence_and_aggregation(self):
         centers = 10
-        model = KAN(layer_sizes=layer_sizes, num_centers=centers)
+        # Initialize layers individually and pass them in a list
+        layer1 = RBFLayer(in_features=2, out_features=5, num_centers=centers)
+        layer2 = RBFLayer(in_features=5, out_features=3, num_centers=centers)
         
-        # Should create exactly 2 layers (2->5 and 5->3)
+        model = Sequential([layer1, layer2])
+        
+        # Should contain exactly 2 layers
         self.assertEqual(len(model.layers), 2)
         
         # Test full sequential forward pass
