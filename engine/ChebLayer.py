@@ -8,14 +8,7 @@ class ChebLayer(Module):
         self.out_features = out_features
         self.degree = degree
 
-        self.c_list = []
-
-        for i in range(degree):
-            self.c_list.append(
-                Tensor(
-                    np.random.randn(1,self.in_features,self.out_features)
-                    )
-                )
+        self.c_list = [Tensor(np.random.randn(1, in_features, out_features) * 0.1) for _ in range(degree)]
             
     def parameters(self):
         return self.c_list
