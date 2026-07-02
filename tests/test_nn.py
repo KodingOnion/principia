@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from principia import Tensor, Linear, RBFLayer, Sequential
+from principia import Tensor, Linear, RBFLayer, Sequential, ChebLayer
 
 class TestNeuralNetworkArchitecture(unittest.TestCase):
 
@@ -87,5 +87,53 @@ class TestNeuralNetworkArchitecture(unittest.TestCase):
         params = model.parameters()
         self.assertEqual(len(params), 6)
 
+    # --- CHEBYSHEV LAYER TESTS ---
+
+    def test_cheb_layer_initialization_and_params(self):
+        """Verify the layer sets up the correct list of coefficient tensors."""
+        in_feat, out_feat, degree = 3, 5, 4
+        model = ChebLayer(in_features=in_feat, out_features=out_feat, degree=degree)
+        
+        params = model.parameters()
+        
+        # The optimizer needs exactly 'degree' number of parameter tensors
+        self.assertEqual(len(params), degree)
+        
+        # Each tensor in the list must match the broadcasting geometry
+        expected_shape = (1, in_feat, out_feat)
+        for param in params:
+            self.assertEqual(param.data.shape, expected_shape)
+
+    def test_cheb_layer_forward_geometry(self):
+        """Verify the polynomial generation collapses correctly into a 2D batch."""
+        in_feat, out_feat, degree = 2, 4, 5
+        model = ChebLayer(in_features=in_feat, out_features=out_feat, degree=degree)
+        
+        # Batch of 6 points
+        x = Tensor(np.random.randn(6, in_feat)) 
+        out = model(x)
+        
+        # Despite generating 5 different 3D tensors internally, the final
+        # result must perfectly collapse back to (Batch, Out_Features)
+        self.assertEqual(out.data.shape, (6, out_feat))
+
+    def test_cheb_layer_backward_pass(self):
+        """Verify the computation graph remains fully connected through the list loop."""
+        model = ChebLayer(in_features=2, out_features=3, degree=4)
+        
+        # Feed a simple batch and force a gradient update
+        x = Tensor([[0.5, -0.5], [0.1, 0.9]])
+        out = model(x)
+        loss = out.sum()
+        loss.backward()
+        
+        # Check every single degree's coefficient tensor
+        params = model.parameters()
+        for param in params:
+            # If any tensor's gradient is perfectly zero, the chain rule broke!
+            self.assertTrue(np.any(param.grad != 0.0), 
+                            "Gradient failed to flow into the coefficient tensor.")
+        
+    
 if __name__ == '__main__':
     unittest.main()

@@ -150,3 +150,17 @@ class Tensor:
 
         result._backward = _backward
         return result
+    
+    def tanh(self):
+        result = Tensor(
+            data=np.tanh(self.data),
+            children=[self],
+            op='tanh'
+            )
+
+        def _backward():
+            self.grad += (1.0 - (result.data ** 2)) * result.grad
+
+        result._backward = _backward
+
+        return result

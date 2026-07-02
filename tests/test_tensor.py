@@ -257,6 +257,21 @@ class TestTensorAutograd(unittest.TestCase):
         # d/dx of MSE = 2 * (preds - targets) / n
         expected_grad = np.array([0.6666666, 0.0, -1.3333333])
         np.testing.assert_array_almost_equal(predictions.grad, expected_grad, decimal=5)
+
+    def test_tanh_forward_and_backward(self):
+        """Verify the hyperbolic tangent activation and its derivative."""
+        a = Tensor([0.0, 1.0, -1.0, 2.0])
+        b = a.tanh()
+        
+        # Forward pass: should exactly match numpy's tanh
+        expected_data = np.tanh(a.data)
+        np.testing.assert_array_almost_equal(b.data, expected_data, decimal=5)
+        
+        b.backward()
+        
+        # Backward pass: d/dx of tanh(x) is 1 - tanh^2(x)
+        expected_grad = 1.0 - (expected_data ** 2)
+        np.testing.assert_array_almost_equal(a.grad, expected_grad, decimal=5)
     
 if __name__ == "__main__":
     unittest.main()
