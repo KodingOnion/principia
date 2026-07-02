@@ -80,7 +80,7 @@ def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, bat
             ax.set_xlim(-1, 1)
             ax.set_ylim(-1, 1)
             ax.set_aspect("equal", adjustable="box")
-            ax.set_title(f"KAN Decision Boundary - Epoch {i}")
+            ax.set_title(f"Free-RBF-KAN Decision Boundary - Epoch {i}")
 
             fig.canvas.draw_idle()
             fig.canvas.flush_events()
