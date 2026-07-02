@@ -43,7 +43,7 @@ print(f"Gradient of a:\n{a.grad}")
 
 ## 🧠 Kolmogorov-Arnold Networks (KAN)
 
-Principia showcases a native implementation of Kolmogorov-Arnold Networks, swapping the static linear weights of traditional MLPs for learnable **Radial Basis Functions**.
+Principia showcases a native implementation of Kolmogorov-Arnold Networks, swapping the static linear weights of traditional MLPs for learnable **Radial Basis Functions** or **Chebyshev Polynomials**.
 
 ### RBF Edge Mathematics
 Each connection computes:
@@ -71,14 +71,17 @@ python -m pip install numpy matplotlib
 ```
 
 ### Running the Demos
-Experience the difference between standard linear approximation and the KAN sine approximation:
+Experience the difference between RBF and Chebyshev networks with the included demos:
 
 ```bash
 # Linear regression
 python demos/linear_network.py
 
-# KAN-based sine approximation
-python demos/sin_network.py
+# RBF-based sine approximation
+python demos/rbf_network.py
+
+# Chebyshev-based sine approximation
+python demos/cheb_network.py
 
 # Legacy scalar demonstration
 python demos/v1/demo_autograd.py
@@ -90,9 +93,11 @@ python demos/v1/demo_autograd.py
 principia/
 ├── engine/
 │   ├── tensor.py         # Modern NumPy-accelerated Autograd Engine
-│   ├── KAN.py            # RBF-KAN network architecture
+│   ├── Sequential.py     # Sequential network architecture
 │   ├── adam_optim.py     # Adam Optimizer implementation
 │   ├── module.py         # Base class for NN modules
+|   ├── cheb_layer.py     # Chebyshev polynomial layer
+|   ├── rbf_layer.py      # Radial Basis Function layer
 │   └── v1/               # Legacy scalar-based research engine
 ├── demos/                # Training demonstrations
 └── tests/                # Mathematical unit tests (Tensor/NN)
