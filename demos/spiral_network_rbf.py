@@ -42,7 +42,7 @@ def spiral_gen(n_points, noise, revolutions):
 
     return coords,labels
 
-def main(num_points=1000, noise=0.5, revolutions=3, learning_rate=0.01, epochs=1000, plot_interval=10, batch_size=12,show_plot=True):
+def main(num_points=1000, noise=0.5, revolutions=3, learning_rate=0.01, epochs=1000, plot_interval=10, batch_size=500,show_plot=True):
     x, y = spiral_gen(num_points, noise, revolutions)
 
     indices = np.arange(len(x))

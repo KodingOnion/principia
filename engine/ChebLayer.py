@@ -8,10 +8,10 @@ class ChebLayer(Module):
         self.out_features = out_features
         self.degree = degree
 
-        self.c_list = [Tensor(np.random.randn(1, in_features, out_features) * 0.1) for _ in range(degree)]
+        self.c = Tensor(np.random.randn(1, in_features, out_features, degree) * 0.1)
             
     def parameters(self):
-        return self.c_list
+        return [self.c]
     
     def __call__(self,x):
         x = x.tanh()
@@ -26,12 +26,11 @@ class ChebLayer(Module):
         for i in range(2,self.degree):
             T_list.append(2*x*T_list[i-1] - T_list[i-2])
 
-        result = Tensor(np.zeros((batch_size, self.out_features)))
+        T_stacked = Tensor.stack(T_list, axis=-1)
+        T_reshaped = T_stacked.reshape((batch_size, self.in_features, 1, self.degree))
 
-        for n,T in enumerate(T_list):
-            T_reshaped = T.reshape((batch_size, self.in_features, 1))
-            term = T_reshaped * self.c_list[n]
-            term = term.sum(axis=1)
-            result = result + term
+        weighted_T = T_reshaped * self.c
+
+        result = weighted_T.sum(axis=-1).sum(axis=1)
 
         return result

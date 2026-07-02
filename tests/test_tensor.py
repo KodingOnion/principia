@@ -272,6 +272,64 @@ class TestTensorAutograd(unittest.TestCase):
         # Backward pass: d/dx of tanh(x) is 1 - tanh^2(x)
         expected_grad = 1.0 - (expected_data ** 2)
         np.testing.assert_array_almost_equal(a.grad, expected_grad, decimal=5)
+
+    # --- STACK TESTS ---
+
+    def test_stack_forward_and_backward_axis_0(self):
+        """Verify stacking along the first axis (batch dimension)."""
+        a = Tensor([1.0, 2.0])
+        b = Tensor([3.0, 4.0])
+        
+        c = Tensor.stack([a, b], axis=0)
+        
+        # Forward pass: should create a 2x2 matrix stacked vertically
+        np.testing.assert_array_equal(c.data, np.array([[1.0, 2.0], [3.0, 4.0]]))
+        
+        # Simulate a specific gradient flowing back from a fake loss function
+        # We manually inject the gradient and fire the closure to test routing
+        c.grad = np.array([[10.0, 20.0], [30.0, 40.0]])
+        c._backward()
+        
+        # Backward pass: 'a' should get the first row, 'b' should get the second row
+        np.testing.assert_array_equal(a.grad, np.array([10.0, 20.0]))
+        np.testing.assert_array_equal(b.grad, np.array([30.0, 40.0]))
+
+    def test_stack_forward_and_backward_axis_neg1(self):
+        """Verify stacking along the last axis (feature/degree dimension)."""
+        a = Tensor([1.0, 2.0])
+        b = Tensor([3.0, 4.0])
+        
+        c = Tensor.stack([a, b], axis=-1)
+        
+        # Forward pass: arrays should be stacked side-by-side as columns
+        np.testing.assert_array_equal(c.data, np.array([[1.0, 3.0], [2.0, 4.0]]))
+        
+        c.grad = np.array([[10.0, 20.0], [30.0, 40.0]])
+        c._backward()
+        
+        # Backward pass: 'a' should get the first column, 'b' should get the second column
+        np.testing.assert_array_equal(a.grad, np.array([10.0, 30.0]))
+        np.testing.assert_array_equal(b.grad, np.array([20.0, 40.0]))
+        
+    def test_stack_in_computation_graph(self):
+        """Verify stack behaves correctly within a full autograd chain rule."""
+        a = Tensor([1.0, 2.0])
+        b = Tensor([3.0, 4.0])
+        
+        # c = [[1, 2], [3, 4]]
+        c = Tensor.stack([a, b], axis=0)
+        
+        # Multiply by 2 and sum it all up
+        d = c * 2.0
+        loss = d.sum()
+        
+        # Fire the full engine
+        loss.backward()
+        
+        # The gradient of (sum(c * 2)) is exactly 2.0 distributed everywhere.
+        # It must safely cross the stack boundary and populate the original tensors.
+        np.testing.assert_array_equal(a.grad, np.array([2.0, 2.0]))
+        np.testing.assert_array_equal(b.grad, np.array([2.0, 2.0]))
     
 if __name__ == "__main__":
     unittest.main()
