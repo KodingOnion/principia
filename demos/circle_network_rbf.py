@@ -1,8 +1,13 @@
-from principia import AdamOptimiser, KAN, Tensor, mse_loss
-import matplotlib.pyplot as plt
-import numpy as np
 import random
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+from principia import mse_loss
+from principia import AdamOptimiser
+from principia import Sequential
+from principia import Tensor
+from principia import RBFLayer
 
 def circle_generator(num_points):
     inputs = []
@@ -27,7 +32,7 @@ def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, bat
     y = Tensor(np.array(y).reshape(-1, 1))
 
 
-    model = KAN([2, 8, 8, 1], 12)
+    model = Sequential([RBFLayer(2,8,12),RBFLayer(8,8,12),RBFLayer(8,1,12)])
     optimiser = AdamOptimiser(model.parameters(), learning_rate)
 
     xx = np.linspace(-1, 1, 50)
@@ -75,7 +80,7 @@ def main(num_points=1000, learning_rate=0.01, epochs=1000, plot_interval=10, bat
             ax.set_xlim(-1, 1)
             ax.set_ylim(-1, 1)
             ax.set_aspect("equal", adjustable="box")
-            ax.set_title(f"KAN Decision Boundary - Epoch {i}")
+            ax.set_title(f"Free-RBF-KAN Decision Boundary - Epoch {i}")
 
             fig.canvas.draw_idle()
             fig.canvas.flush_events()

@@ -1,6 +1,6 @@
 """Train a KAN model to approximate a sine wave and plot results dynamically."""
 
-from principia import AdamOptimiser, KAN, Tensor, mse_loss
+from principia import AdamOptimiser, Sequential, Tensor, mse_loss, RBFLayer
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -10,7 +10,7 @@ def main(learning_rate=0.01, epochs=100000, plot_interval=50, show_plot=True):
     X = Tensor(X_data)
     Y = Tensor(Y_data)
 
-    model = KAN(layer_sizes=[1, 5, 1], num_centers=10)
+    model = Sequential([RBFLayer(1,5,10),RBFLayer(5,1,10)])
     optimiser = AdamOptimiser(model.parameters(), learning_rate=learning_rate)
 
     plt.ion()

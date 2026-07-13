@@ -150,3 +150,32 @@ class Tensor:
 
         result._backward = _backward
         return result
+    
+    def tanh(self):
+        result = Tensor(
+            data=np.tanh(self.data),
+            children=[self],
+            op='tanh'
+            )
+
+        def _backward():
+            self.grad += (1.0 - (result.data ** 2)) * result.grad
+
+        result._backward = _backward
+
+        return result
+    
+    @staticmethod
+    def stack(tensors, axis=-1):
+        stacked_data = np.stack([t.data for t in tensors], axis=axis)
+
+        result = Tensor(data=stacked_data, children=tensors, op="stack")
+
+        def _backward():
+            for i, t in enumerate(tensors):
+                grad_slice = np.take(result.grad, indices=i, axis=axis)
+
+                t.grad += result._unbroadcast(grad_slice, t.grad.shape)
+
+        result._backward = _backward
+        return result

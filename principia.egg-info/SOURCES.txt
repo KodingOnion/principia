@@ -8,4 +8,5 @@ principia.egg-info/dependency_links.txt
 principia.egg-info/requires.txt
 principia.egg-info/top_level.txt
 tests/test_nn.py
+tests/test_sequential.py
 tests/test_tensor.py
