@@ -18,7 +18,7 @@ def main(learning_rate=0.01, epochs=100000, plot_interval=50, show_plot=True):
 
     ax.set_xlim(-np.pi, np.pi)
     ax.set_ylim(-1.5, 1.5)
-    ax.set_title("KAN Sine Wave Approximation - Epoch 0")
+    ax.set_title("KAN sin(10x) + 0.5*sin(3x) Approximation - Epoch 0")
 
     ax.plot(X_data, Y_data, label="True Sine Wave", color="blue", linewidth=2)
 
@@ -38,7 +38,7 @@ def main(learning_rate=0.01, epochs=100000, plot_interval=50, show_plot=True):
             print(f"EPOCH NUM:{i} LOSS:{MSE.data}")
 
             pred_line.set_ydata(predictions.data)
-            ax.set_title(f"KAN Sine Wave Approximation - Epoch {i} (Loss: {MSE.data:.5f})")
+            ax.set_title(f"KAN sin(10x) + 0.5*sin(3x) Approximation - Epoch {i} (Loss: {MSE.data:.5f})")
 
             fig.canvas.draw_idle()
             fig.canvas.flush_events()
